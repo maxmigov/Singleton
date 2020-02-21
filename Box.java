@@ -24,25 +24,10 @@ public class Box {
     }
 
     public static Box getInstance(Object value) {
-        // Техника, которую мы здесь применяем называется «блокировка с двойной
-        // проверкой» (Double-Checked Locking). Она применяется, чтобы
-        // предотвратить создание нескольких объектов-одиночек, если метод будет
-        // вызван из нескольких потоков одновременно.
-        //
-        // Хотя переменная `result` вполне оправданно кажется здесь лишней, она
-        // помогает избежать подводных камней реализации DCL в Java.
-        //
-        // Больше об этой проблеме можно почитать здесь:
-        // https://refactoring.guru/ru/java-dcl-issue
-        Box result = instance;
-        if (result != null) {
-            return result;
+        if (instance == null) {
+            instance = new Box(value);
         }
-        synchronized (Box.class) {
-            if (instance == null) {
-                instance = new Box(value);
-            }
-            return instance;
-        }
+        return instance;
     }
+
 }
